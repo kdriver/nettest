@@ -149,6 +149,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = nettest;
+				SYMROOT = /Users/keith/Documents/dev/nettest_git/build;
 			};
 			name = Debug;
 		};
@@ -160,6 +161,7 @@
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = nettest;
+				SYMROOT = /Users/keith/Documents/dev/nettest_git/build;
 			};
 			name = Release;
 		};
