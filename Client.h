@@ -12,6 +12,8 @@
 #define TCPPORT 14141
 
 #define MESSAGE_SIZE 100
-#define PACKET_SIZE  512
+#define PACKET_SIZE  1024
+
+#define PAYLOAD_5MB   (unsigned long)5000000
 
 void BeAClient(void);

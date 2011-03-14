@@ -138,7 +138,7 @@ void BeAClient()
 {
 	int sockfd;
 	int ans;
-	int total=0;
+	unsigned long total=0;
 	int packets=0;
 	struct timeval start_time,end_time,result;
 
@@ -188,7 +188,9 @@ void BeAClient()
 	// OK, now we expect that we will get 50000 packets of data of fixed size, so we need to keep reading unikt we have all the data
 		
 	gettimeofday(&start_time,NULL);
-	do {
+    
+	unsigned long pc=0,last_pc=0,shortp=0,normalp=0;
+    do {
 		ans = recv(sockfd,packet,sizeof(packet),0);
 		if ( ans < 0 )
 		{
@@ -197,11 +199,27 @@ void BeAClient()
 		}
 		packets++;
 		total = total + ans;
+        if ( ans < sizeof(packet) )
+        {
+         //   printf("Small packet rxed %d, total %lu   :  \r ",ans,total);
+            shortp++;
+        }
+        else
+        {
+            normalp++;
+        }
+        pc = (total*100)/(PAYLOAD_5MB);
+        if ( pc != last_pc )
+        {
+            printf("  %lu short %lu normal  :  %lu  complete, total %lu\r",shortp,normalp,pc,total);
+            fflush(stdout);
+            last_pc = pc ;
+        }
 		
-	}while (total < (PACKET_SIZE * 50000)) ;
+	}while (total < PAYLOAD_5MB) ;
 	gettimeofday(&end_time,0);
 	
-	printf("got all the data in %d packets\n",packets);
+	printf("\ngot all the data in %d read attempts ( %lu bytes )\n",packets,total);
 	
 	timeval_subtract(&result,&end_time,&start_time);
 	tm=((float)result.tv_usec + (result.tv_sec * 1000000 ))/1000000;

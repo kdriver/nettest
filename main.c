@@ -155,9 +155,9 @@ void  HandleClient(int fd)
 			int total = 0;
 			int attempts=0;
 			i = 0;
-			printf("conduct test , sending %lu bytes\n",50000*sizeof(packet));
+			printf("conduct test , sending %lu bytes\n",PAYLOAD_5MB);
 			
-			while ( total < (50000*sizeof(packet)) )
+			while ( total < PAYLOAD_5MB)
 			{
 					
 				attempts++;
