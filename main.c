@@ -138,6 +138,8 @@ void  HandleClient(int fd)
 	char command[MESSAGE_SIZE]; 
 	char packet[PACKET_SIZE];
 	int i;
+    int s;
+    unsigned long left_to_send=0;
 	
 	desc = fd;
 	
@@ -155,9 +157,18 @@ void  HandleClient(int fd)
 			
 			for ( i = 0 ; i < 50000; i++ )
 			{
-				if ( send(desc, packet, sizeof(packet), 0) != sizeof(packet) )
+				if ( (s=send(desc, packet, sizeof(packet), 0)) != sizeof(packet) )
 					{
-						printf("problem. did not send all packet bytes");
+						printf("problem. did not send all packet bytes  %d of %lu\n",s,sizeof(packet));
+                        left_to_send = ( sizeof(packet) - s );
+                        while ( left_to_send )
+                        {
+                            usleep(10000);
+                            s = send(desc, packet, left_to_send, 0);
+                            printf("    set chunk %d\n",s);
+                            left_to_send = left_to_send - s;
+                            
+                        }
 					}
 				if ( (i%1000) == 0 )
 					printf("sent %d packets\n",i);
@@ -229,7 +240,7 @@ int main (int argc, const char * argv[]) {
             if (new_fd == -1) {
                 if ( errno == EAGAIN )
                 {
-		    printf(" NO client, so send out another mc packet\n");
+		    printf(" No client, so send out another mc packet\n");
                     sendMCPacket();
                     usleep(1000000);
                 }
