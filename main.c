@@ -152,34 +152,47 @@ void  HandleClient(int fd)
 	else {
 		if ( strcmp("SIZE 50000",command) == 0 )
 		{
-			// conduct test
-			printf("conduct test\n");
+			int total = 0;
+			int attempts=0;
+			i = 0;
+			printf("conduct test , sending %d bytes\n",50000*sizeof(packet));
 			
-			for ( i = 0 ; i < 50000; i++ )
+			while ( total < (50000*sizeof(packet)) )
 			{
-				if ( (s=send(desc, packet, sizeof(packet), 0)) != sizeof(packet) )
+					
+				attempts++;
+				s=send(desc, packet, sizeof(packet), 0);
+				if ( s < 0 )
+				{
+					if ( errno == EAGAIN )
 					{
-						printf("problem. did not send all packet bytes  %d of %lu\n",s,sizeof(packet));
-                        left_to_send = ( sizeof(packet) - s );
-                        while ( left_to_send )
-                        {
-                            usleep(10000);
-                            s = send(desc, packet, left_to_send, 0);
-                            printf("    set chunk %d\n",s);
-                            left_to_send = left_to_send - s;
-                            
-                        }
+						usleep(10000);
+						printf(".");
+						continue;
 					}
+					else
+					{
+						perror("send\n");
+					}
+				}
+				else
+				{
+					total = total + s;
+					i++;
+				}
+						
+
 				if ( (i%1000) == 0 )
 					printf("sent %d packets\n",i);
 			}
+			printf("send %d bytes in %d packets in %d attempts\n",total,i,attempts);
 			
 			// we are going to send 50000 messages of data so the client can measure the speed
 			
 		}
 	}
+	printf("done - wait for next client \n");
 
-	exit(1);
 	
 	
 	
@@ -222,7 +235,7 @@ int main (int argc, const char * argv[]) {
 		sendMCPacket();
 		usleep(10000);
 	}
-	printf("200 Multicast packets sent \n");
+	printf("%d Multicast packets sent \n",i);
 	
 	while ( 1 )
 	{
