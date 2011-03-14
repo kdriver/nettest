@@ -29,6 +29,7 @@
 		08FB7796FE84155DC02AAC07 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		5309A4AF1328F86A000392DF /* Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = "<group>"; };
 		5309A4B01328F86B000392DF /* Client.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Client.c; sourceTree = "<group>"; };
+		53312512132E5C0F0099FA3F /* Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
 		8DD76FB20486AB0100D96B5E /* nettest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = nettest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6A0FF2C0290799A04C91782 /* nettest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = nettest.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				C6A0FF2C0290799A04C91782 /* nettest.1 */,
+				53312512132E5C0F0099FA3F /* Notes */,
 			);
 			name = Documentation;
 			sourceTree = "<group>";

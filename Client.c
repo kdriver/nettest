@@ -227,7 +227,6 @@ void BeAClient()
 	printf(" which is %f bytes/sec\n",((float)total)/ tm);
 	printf(" which is %f Mb/sec\n",((float)total)/1000000/ tm);
 
-	sleep(5);
 	exit(0);
 	
 }
