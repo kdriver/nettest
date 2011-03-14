@@ -139,7 +139,7 @@ void  HandleClient(int fd)
 	char packet[PACKET_SIZE];
 	int i;
     int s;
-    unsigned long left_to_send=0;
+    
 	
 	desc = fd;
 	
@@ -155,7 +155,7 @@ void  HandleClient(int fd)
 			int total = 0;
 			int attempts=0;
 			i = 0;
-			printf("conduct test , sending %d bytes\n",50000*sizeof(packet));
+			printf("conduct test , sending %lu bytes\n",50000*sizeof(packet));
 			
 			while ( total < (50000*sizeof(packet)) )
 			{
