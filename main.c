@@ -206,7 +206,7 @@ int main (int argc, const char * argv[]) {
 
 	// Say we are here
 
-	for ( i = 0 ; i < 200 ; i++ )
+	for ( i = 0 ; i < 5  ; i++ )
 	{
 		sendMCPacket();
 		usleep(10000);
@@ -229,8 +229,9 @@ int main (int argc, const char * argv[]) {
             if (new_fd == -1) {
                 if ( errno == EAGAIN )
                 {
+		    printf(" NO client, so send out another mc packet\n");
                     sendMCPacket();
-                    usleep(100000);
+                    usleep(1000000);
                 }
                 else
                 {
