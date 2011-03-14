@@ -168,7 +168,7 @@ void BeAClient()
 
 	// connect!
 	
-	if ( connect(sockfd, &other_addr , sizeof(other_addr)) < 0 )
+	if ( connect(sockfd, (const struct sockaddr *)&other_addr , sizeof(other_addr)) < 0 )
 	{
 		perror("could not connect\n");
 		exit(1);
