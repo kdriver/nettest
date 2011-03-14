@@ -36,7 +36,6 @@ int GetServerFromMC(void)
 	int recv_len;                 /* length of string received */
 	struct ip_mreq mc_req;        /* multicast request structure */
 	char* mc_addr_str="225.0.0.1";/* multicast IP address */
-	unsigned short mc_port=MCPORT;  /* multicast port */
 	unsigned int from_len;        /* source addr length */
 	
 	/* create socket to join multicast group on */
