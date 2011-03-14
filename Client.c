@@ -150,14 +150,14 @@ void BeAClient()
 	
 	// IF we are lucky we will see a multicast packet
 	
-	printf("msg\n");
 	if ( GetServerFromMC() != FOUND )
 	{
 		printf("need to get a realIP address\n");
 		exit(0);
 	}
 	
-	printf("so now connect\n");
+	printf("so now connect to %s port %d\n",inet_ntoa(from_addr.sin_addr),TCPPORT);
+    
 	sockfd = socket(PF_INET, SOCK_STREAM, 0);
 	
 	other_addr.sin_family = AF_INET;

@@ -2,6 +2,8 @@
 #include <stdlib.h>      /* for atoi() */
 #include <string.h>      /* for strlen() */
 #include <unistd.h>      /* for close() */
+#include <fcntl.h>
+#include <errno.h>
 #include <sys/types.h>   /* for type definitions */
 #include <sys/socket.h>  /* for socket API function calls */
 #include <netinet/in.h>  /* for address structs */
@@ -76,15 +78,35 @@ int bindlocal(void)
 	int sockfd;
 	int yes=1;
 	struct sockaddr_in my_addr;
+    int flags=0;
 	
 	sockfd = socket(PF_INET, SOCK_STREAM, 0);
 	
 	
-	// lose the pesky "Address already in use" error message
 	if (setsockopt(sockfd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int)) == -1) {
 		perror("setsockopt");
 		exit(1);
 	} 
+    
+    
+     if ( (flags=fcntl(sockfd,F_GETFL,0)) < 0 )
+     {
+         perror("flags error\n");
+     }
+    else
+    {
+        if ( fcntl(sockfd,F_SETFL,flags | O_NONBLOCK ) < 0 )
+        {
+            perror("error setting non blocking I/O\n");
+        }
+        else
+            printf("non blocking i/o enabled\n");
+    }
+        
+               
+               
+               
+    
 	
 	my_addr.sin_family = AF_INET;
 	my_addr.sin_port = htons(TCPPORT);     // short, network byte order
@@ -96,6 +118,8 @@ int bindlocal(void)
 		perror("bind() failed\n");
 		exit(1);
 	}
+    else
+        printf("waiting on port %d\n",TCPPORT);
 	
 	
 	
@@ -193,15 +217,27 @@ int main (int argc, const char * argv[]) {
 	{
 		unsigned int sin_size;
 		struct sockaddr_in their_addr;
-		int new_fd;
+		int new_fd=-1;
 
 
 		printf("waiting for a client\n");
 		sin_size = sizeof their_addr;
-        new_fd = accept(sock, (struct sockaddr *)&their_addr, &sin_size);
-        if (new_fd == -1) {
-            perror("accept");
-            continue;
+        
+        while ( new_fd < 0 )
+        {
+            new_fd = accept(sock, (struct sockaddr *)&their_addr, &sin_size);
+            if (new_fd == -1) {
+                if ( errno == EAGAIN )
+                {
+                    sendMCPacket();
+                    usleep(100000);
+                }
+                else
+                {
+                    perror("accept");
+                    continue;
+                }
+            }
         }
 		
         printf("server: got connection from %s\n", inet_ntoa(their_addr.sin_addr));
