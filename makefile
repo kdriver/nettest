@@ -1,2 +1,2 @@
 release:
-  $(CC) -o nettest nettest.c Client.c
+	$(CC) -o nettest main.c Client.c
